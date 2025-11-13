@@ -16,8 +16,10 @@ const formatBytes = (bytes: number, decimals = 2) => {
 const AdminPage: React.FC = () => {
   const [documents, setDocuments] = useState<DocumentMetadata[]>([]);
   const [isLoadingDocs, setIsLoadingDocs] = useState(true);
-  
+
   const [file, setFile] = useState<File | null>(null);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('general');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<{ success: boolean; message: string } | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -68,17 +70,19 @@ const AdminPage: React.FC = () => {
   };
   
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file || !title.trim()) return;
 
     setIsUploading(true);
     setUploadStatus(null);
 
-    const result = await uploadDocument(file);
+    const result = await uploadDocument(file, title, category);
     setUploadStatus(result);
     setIsUploading(false);
     if (result.success) {
         setFile(null);
-        fetchDocuments(); // Refresh the list after successful upload
+        setTitle('');
+        setCategory('general');
+        fetchDocuments();
     }
   };
 
@@ -128,7 +132,7 @@ const AdminPage: React.FC = () => {
                     </form>
 
                     {file && !isUploading && (
-                        <div className="mt-4">
+                        <div className="mt-4 space-y-3">
                             <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
                                 <div className="flex items-center gap-3 overflow-hidden">
                                     <FileIcon />
@@ -136,11 +140,42 @@ const AdminPage: React.FC = () => {
                                 </div>
                                 <button onClick={() => setFile(null)} className="text-gray-500 hover:text-red-500 dark:hover:text-red-400 flex-shrink-0 ml-2">&times;</button>
                             </div>
-                            <button 
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Document Title
+                                </label>
+                                <input
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Enter document title"
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    Category
+                                </label>
+                                <select
+                                    value={category}
+                                    onChange={(e) => setCategory(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                >
+                                    <option value="general">General</option>
+                                    <option value="accounting">Accounting</option>
+                                    <option value="auditing">Auditing</option>
+                                    <option value="taxation">Taxation</option>
+                                    <option value="corporate_law">Corporate Law</option>
+                                    <option value="financial_reporting">Financial Reporting</option>
+                                </select>
+                            </div>
+                            <button
                                 onClick={handleUpload}
-                                className="w-full mt-4 px-4 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
+                                disabled={!title.trim()}
+                                className="w-full px-4 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
                             >
-                                Upload to Vector DB
+                                Upload to Knowledge Base
                             </button>
                         </div>
                     )}
