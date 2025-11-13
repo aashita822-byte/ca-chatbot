@@ -1,0 +1,7 @@
+{
+  "name": "CA Student AI Chatbot",
+  "description": "An intelligent chatbot for Chartered Accountancy students. It offers two modes: a standard Q&A and a unique 'Discussion Style' that presents a debate between two AI personas on any given topic. Supports both text and voice interaction. Includes an admin panel to upload new documents to the knowledge base.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
