@@ -53,6 +53,11 @@ class ApiService {
       const data = await response.json();
       return { data };
     } catch (error: any) {
+      if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+        return {
+          error: 'Cannot connect to backend server. Please start it by running: cd backend && python3 -m pip install -r requirements.txt && python3 run.py'
+        };
+      }
       return { error: error.message };
     }
   }
@@ -113,6 +118,11 @@ class ApiService {
       const data = await response.json();
       return { data };
     } catch (error: any) {
+      if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+        return {
+          error: 'Cannot connect to backend server. Please start it first.'
+        };
+      }
       return { error: error.message };
     }
   }
@@ -151,6 +161,11 @@ class ApiService {
       const data = await response.json();
       return { data };
     } catch (error: any) {
+      if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+        return {
+          error: 'Cannot connect to backend server. Please start it first.'
+        };
+      }
       return { error: error.message };
     }
   }
@@ -175,6 +190,11 @@ class ApiService {
       const audioBlob = await response.blob();
       return { data: audioBlob };
     } catch (error: any) {
+      if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
+        return {
+          error: 'Cannot connect to backend server. Please start it first.'
+        };
+      }
       return { error: error.message };
     }
   }
