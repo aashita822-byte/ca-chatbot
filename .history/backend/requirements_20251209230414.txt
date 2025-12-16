@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+python-multipart
+
+pymongo
+motor
+
+python-jose[cryptography]
+passlib[bcrypt]
+
+httpx
+pydantic
+
+pinecone
+pypdf
+pydantic-settings
